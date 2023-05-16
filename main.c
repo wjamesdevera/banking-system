@@ -31,6 +31,7 @@ void customer_login_page();
 bool authenticate_customer_login(char username[], char password[]);
 void employee_page();
 void create_customer_acc();
+void set_current_customer(char username[]);
 bool find_customer(char username[]);
 
 typedef struct {
@@ -157,7 +158,7 @@ void employee_login()
         printf(GREEN);
         printf("ACCESS GRANTED\n");
         printf(RESET);
-        exit(0);
+        employee_page();
     }
     system("cls");
     printf(RED);
@@ -377,19 +378,26 @@ void employee_page()
         printf("6 - Back to main menu\n");
         printf("7 - Exit application\n");
         printf("Enter your choice: ");
-        scanf("%c", choice);
+        fflush(stdin);
+        scanf("%c", &choice);
         switch (choice)
         {
             case '1':
                 create_customer_acc();
                 break;
             case '2':
+                break;
             case '3':
+                break;
             case '4':
+                break;
             case '5':
+                break;
             case '6':
                 main();
+                break;
             case '7':
+                exit(0);
             default:
                 system("cls");
                 printf(RED);
@@ -428,6 +436,10 @@ void create_customer_acc()
     printf(GREEN);
     printf("Account Creation Successful\n");
     printf(RESET);
+
+    retrieve_customer_acc();
+
+    set_current_customer(username);
     return;
 }
 
@@ -435,10 +447,22 @@ bool find_customer(char username[])
 {
     for (int i = 0; i < customer_count; i++)
     {
-        if (strcasecmp(username, customers[i].username))        
+        if (strcasecmp(username, customers[i].username) == 0)        
         {
             return true;
         }
     }
     return false;
+}
+
+void set_current_customer(char username[])
+{
+    for (int i = 0; i < customer_count; i++)
+    {
+        if (strcasecmp(username, customers[i].username) == 0)        
+        {
+            current_customer = customers[i];
+        }
+    }
+    return;
 }

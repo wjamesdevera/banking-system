@@ -1,6 +1,2 @@
 admin
 admin
-fa
-fa
-win
-win
