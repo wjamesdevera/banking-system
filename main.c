@@ -25,9 +25,12 @@ void retrieve_employee_acc();
 void employee_create_acc();
 bool find_employee(char username[]);
 void add_employee_account(char username[], char password[]);
+void retrieve_customer_acc();
 
 typedef struct {
     char account_type[MAX_STR_LENGTH];
+    char username[MAX_STR_LENGTH];
+    char password[MAX_STR_LENGTH];
     char first_name[MAX_STR_LENGTH];
     char last_name[MAX_STR_LENGTH];
     char full_name[MAX_STR_LENGTH];
@@ -46,7 +49,7 @@ typedef struct {
 } Employee;
 
 Employee employees[MAX_EMPLOYEE];
-
+Customer customers[MAX_CUSTOMERS];
 
 int main()
 {
@@ -169,7 +172,6 @@ void retrieve_employee_acc()
 {
     employee_count = 0;
     FILE *file;
-    bool access_accepted = false;
     char buffer[BUFFER_SIZE];
     int line = 0;
 
@@ -261,4 +263,38 @@ void add_employee_account(char username[], char password[])
     fclose(file);
     retrieve_employee_acc();
     return;
+}
+
+void retrieve_customer_acc() 
+{
+    customer_count = 0;
+    FILE *file;
+    char buffer[BUFFER_SIZE];
+    int line = 0;
+
+    file = fopen("./accounts/customer_acc.txt", "r");
+
+    if (file == NULL) {
+        printf("ERROR: Cannot open employee accounts\n");
+        return;
+    }
+
+    while (fgets(buffer, BUFFER_SIZE, file) != NULL)
+    {
+        int len = strlen(buffer);
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        if (line % 2 == 0)
+        {
+            strcpy(customers[customer_count].username, buffer);
+        }
+        if (line % 2 == 1)
+        {
+            strcpy(customers[customer_count].password, buffer);
+            customer_count++;
+        }
+        line++;
+    }
+
+    fclose(file);
 }
