@@ -16,19 +16,22 @@
 int employee_count = 0;
 int customer_count = 0;
 
+
 void print_menu();
 void employee_login();
 void employee_login_page();
 void employee_create_acc();
 bool authenticate_employee_login(char username[], char password[]);
 void retrieve_employee_acc();
-void employee_create_acc();
 bool find_employee(char username[]);
 void add_employee_account(char username[], char password[]);
 void retrieve_customer_acc();
 void add_customer_acc(char username[], char password[]);
 void customer_login_page();
 bool authenticate_customer_login(char username[], char password[]);
+void employee_page();
+void create_customer_acc();
+bool find_customer(char username[]);
 
 typedef struct {
     char account_type[MAX_STR_LENGTH];
@@ -54,6 +57,9 @@ typedef struct {
 Employee employees[MAX_EMPLOYEE];
 Customer customers[MAX_CUSTOMERS];
 
+Employee current_employee;
+Customer current_customer;
+
 int main()
 {
     retrieve_employee_acc();
@@ -76,7 +82,7 @@ int main()
                 employee_login_page();
                 break;
             case '2':
-                main_on = false;
+                customer_login_page();
                 break;
             case '3':
                 main_on = false;
@@ -317,7 +323,7 @@ void add_customer_acc(char username[], char password[])
     fprintf(file, "\n%s\n%s", username, password);
 
     fclose(file);
-    retrieve_employee_acc();
+    retrieve_customer_acc();
     return;
 }
 
@@ -349,6 +355,86 @@ bool authenticate_customer_login(char username[], char password[])
     for (int i = 0; i < employee_count; i++)
     {
         if (strcmp(username, customers[i].username) == 0 && strcmp(password, customers[i].password) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void employee_page()
+{
+    bool page_on = true;
+    char choice;
+    while (page_on)
+    {
+        printf("Employee Page\n");
+        printf("1 - User Registration and Login\n");
+        printf("2 - Account Management\n");
+        printf("3 - Transaction History\n");
+        printf("4 - Transfer Money\n");
+        printf("5 - Loan Management\n");
+        printf("6 - Back to main menu\n");
+        printf("7 - Exit application\n");
+        printf("Enter your choice: ");
+        scanf("%c", choice);
+        switch (choice)
+        {
+            case '1':
+                break;
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                main();
+            case '7':
+            default:
+                system("cls");
+                printf(RED);
+                printf("Invalid Choice. Please try again\n");
+                printf(RESET);
+        }
+    }
+}
+
+void create_customer_acc()
+{
+    if (customer_count >= MAX_CUSTOMERS)
+    {
+        printf("CUSTOMER ACCOUNTS MAXED!\n");
+        main();
+    }
+
+    char username[MAX_STR_LENGTH];
+    char password[MAX_STR_LENGTH];
+
+    printf("Customer Create Account Page\n");
+    printf("Username: ");
+    scanf("%s", username);
+    if (find_employee(username))
+    {
+        system("cls");
+        printf(RED);
+        printf("Username already exists\n");
+        printf(RESET);
+        employee_login_page();
+    }
+    printf("Password: ");
+    scanf("%s", password);
+    add_employee_account(username, password);
+    system("cls");
+    printf(GREEN);
+    printf("Account Creation Successful\n");
+    printf(RESET);
+    employee_login_page();
+}
+
+bool find_customer(char username[])
+{
+    for (int i = 0; i < customer_count; i++)
+    {
+        if (strcasecmp(username, customers[i].username))        
         {
             return true;
         }
