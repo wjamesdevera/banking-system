@@ -33,6 +33,7 @@ void employee_page();
 void create_customer_acc();
 void set_current_customer(char username[]);
 bool find_customer(char username[]);
+void set_current_employee(char username[]);
 
 typedef struct {
     char account_type[MAX_STR_LENGTH];
@@ -462,6 +463,19 @@ void set_current_customer(char username[])
         if (strcasecmp(username, customers[i].username) == 0)        
         {
             current_customer = customers[i];
+        }
+    }
+    return;
+}
+
+
+void set_current_employee(char username[])
+{
+    for (int i = 0; i < employee_count; i++)
+    {
+        if (strcasecmp(username, employees[i].username) == 0)        
+        {
+            current_employee = employees[i];
         }
     }
     return;
