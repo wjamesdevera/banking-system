@@ -26,6 +26,9 @@ void employee_create_acc();
 bool find_employee(char username[]);
 void add_employee_account(char username[], char password[]);
 void retrieve_customer_acc();
+void add_customer_acc(char username[], char password[]);
+void customer_login_page();
+bool authenticate_customer_login(char username[], char password[]);
 
 typedef struct {
     char account_type[MAX_STR_LENGTH];
@@ -54,6 +57,7 @@ Customer customers[MAX_CUSTOMERS];
 int main()
 {
     retrieve_employee_acc();
+    retrieve_customer_acc();
     system("cls");
     char choice;
     bool main_on = true;
@@ -275,7 +279,7 @@ void retrieve_customer_acc()
     file = fopen("./accounts/customer_acc.txt", "r");
 
     if (file == NULL) {
-        printf("ERROR: Cannot open employee accounts\n");
+        printf("ERROR: Cannot open customer accounts\n");
         return;
     }
 
@@ -297,4 +301,57 @@ void retrieve_customer_acc()
     }
 
     fclose(file);
+}
+
+void add_customer_acc(char username[], char password[])
+{
+    FILE *file;
+
+    file = fopen("./accounts/customer_acc.txt", "a");
+
+    if (file == NULL) {
+        printf("ERROR: Cannot open customer accounts\n");
+        return;
+    }
+
+    fprintf(file, "\n%s\n%s", username, password);
+
+    fclose(file);
+    retrieve_employee_acc();
+    return;
+}
+
+
+void customer_login_page()
+{
+    char username[MAX_STR_LENGTH];
+    char password[MAX_STR_LENGTH];
+    printf("Username: ");
+    scanf("%s", username);
+    printf("Password: ");
+    scanf("%s", password);
+    if (authenticate_customer_login(username, password))
+    {
+        printf(GREEN);
+        printf("ACCESS GRANTED\n");
+        printf(RESET);
+        exit(0);
+    }
+    system("cls");
+    printf(RED);
+    printf("ACCESS DENIED\n");
+    printf(RESET);
+    return;
+}
+
+bool authenticate_customer_login(char username[], char password[])
+{
+    for (int i = 0; i < employee_count; i++)
+    {
+        if (strcmp(username, customers[i].username) == 0 && strcmp(password, customers[i].password) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
 }
