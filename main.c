@@ -54,10 +54,10 @@ int main()
     system("cls");
     char choice;
     bool main_on = true;
-    printf("Banking Management System\n");
-    print_menu();
     while (main_on) 
     {
+        printf("Banking Management System\n");
+        print_menu();
         printf("Enter your choice: ");
         fflush(stdin);
         scanf("%c", &choice);
@@ -65,7 +65,6 @@ int main()
         switch (choice) 
         {
             case '1':
-                main_on = false;
                 system("cls");
                 employee_login_page();
                 break;
@@ -119,8 +118,9 @@ void employee_login_page()
                 employee_create_acc();
                 break;
             case '3':
+                system("cls");
                 login_on = false;
-                main();
+                return;
                 break;
             default:
                 system("cls");
