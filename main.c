@@ -63,8 +63,8 @@ typedef struct {
 Employee employees[MAX_EMPLOYEE];
 Customer customers[MAX_CUSTOMERS];
 
-Employee current_employee;
-Customer current_customer;
+Employee *current_employee;
+Customer *current_customer;
 
 int main()
 {
@@ -418,7 +418,7 @@ void employee_page()
     char choice;
     while (page_on)
     {
-        printf("Employee Page: %s\n", current_employee.username);
+        printf("Employee Page: %s%s%s\n", CYAN, current_employee->username, RESET);
         printf("1 - User Registration and Login\n");
         printf("2 - Account Management\n");
         printf("3 - Transaction History\n");
@@ -511,7 +511,7 @@ void set_current_customer(char username[])
     {
         if (strcasecmp(username, customers[i].username) == 0)        
         {
-            current_customer = customers[i];
+            current_customer = &customers[i];
         }
     }
     return;
@@ -523,7 +523,7 @@ void set_current_employee(char username[])
     {
         if (strcasecmp(username, employees[i].username) == 0)        
         {
-            current_employee = employees[i];
+            current_employee = &employees[i];
         }
     }
     return;
@@ -545,7 +545,33 @@ void account_management()
     set_current_customer(username);
 
     system("cls");
-    printf("Managing Account: %s%s%s\n", RED, current_customer.username, RESET);
+    printf("Managing Account: %s%s%s\n", CYAN, current_customer->username, RESET);
+    printf("Full Name: ");
+    fflush(stdin);
+    scanf("%s", current_customer->full_name);
+    printf("Age: ");
+    fflush(stdin);
+    scanf("%d", &current_customer->age);
+    printf("Gender: ");
+    fflush(stdin);
+    scanf("%s", current_customer->gender);
+    printf("Address: ");
+    fflush(stdin);
+    scanf("%s", current_customer->address);
+    printf("Occupation: ");
+    fflush(stdin);
+    scanf("%s", current_customer->occupation);
+    printf("Height (cm): ");
+    fflush(stdin);
+    scanf("%f", &current_customer->height);
+    printf("Weight (kg): ");
+    fflush(stdin);
+    scanf("%f", &current_customer->weight);
+    fflush(stdin);
+    printf("Status: ");
+    fflush(stdin);
+    scanf("%s", current_customer->status);
+    save_customers();
 }
 
 void save_customers()
