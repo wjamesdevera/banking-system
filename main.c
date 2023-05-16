@@ -381,6 +381,7 @@ void employee_page()
         switch (choice)
         {
             case '1':
+                create_customer_acc();
                 break;
             case '2':
             case '3':
@@ -412,22 +413,22 @@ void create_customer_acc()
     printf("Customer Create Account Page\n");
     printf("Username: ");
     scanf("%s", username);
-    if (find_employee(username))
+    if (find_customer(username))
     {
         system("cls");
         printf(RED);
         printf("Username already exists\n");
         printf(RESET);
-        employee_login_page();
+        return;
     }
     printf("Password: ");
     scanf("%s", password);
-    add_employee_account(username, password);
+    add_customer_acc(username, password);
     system("cls");
     printf(GREEN);
     printf("Account Creation Successful\n");
     printf(RESET);
-    employee_login_page();
+    return;
 }
 
 bool find_customer(char username[])
