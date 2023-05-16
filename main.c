@@ -8,6 +8,11 @@
 #define MAX_EMPLOYEE 100
 #define BUFFER_SIZE 1024
 
+#define RESET "\033[0m"
+#define CYAN  "\033[36m" 
+#define RED   "\033[31m" 
+#define GREEN "\033[32m" 
+
 int employee_count = 0;
 int customer_count = 0;
 
@@ -116,7 +121,9 @@ void employee_login_page()
                 break;
             default:
                 system("cls");
+                printf(CYAN);
                 printf("Invalid Choice. Please try again\n");
+                printf(RESET);
         }
     }
 }
@@ -131,11 +138,15 @@ void employee_login()
     scanf("%s", password);
     if (authenticate_employee_login(username, password))
     {
+        printf(GREEN);
         printf("ACCESS GRANTED\n");
+        printf(RESET);
         exit(0);
     }
     system("cls");
+    printf(RED);
     printf("ACCESS DENIED\n");
+    printf(RESET);
     employee_login_page();
 }
 
@@ -153,6 +164,7 @@ bool authenticate_employee_login(char username[], char password[])
 
 void retrieve_employee_acc()
 {
+    employee_count = 0;
     FILE *file;
     bool access_accepted = false;
     char buffer[BUFFER_SIZE];
@@ -209,6 +221,8 @@ void employee_create_acc()
     printf("Password: ");
     scanf("%s", password);
     add_employee_account(username, password);
+    system("cls");
+    printf("Account Creation Successful\n");
     return;
 }
 
@@ -235,7 +249,7 @@ void add_employee_account(char username[], char password[])
         return;
     }
 
-    fprintf(file, "%s\n%s", username, password);
+    fprintf(file, "\n%s\n%s", username, password);
 
     fclose(file);
     return;
