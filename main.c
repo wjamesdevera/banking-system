@@ -156,15 +156,18 @@ void employee_login()
     scanf("%s", password);
     if (authenticate_employee_login(username, password))
     {
+        system("cls");
         printf(GREEN);
         printf("ACCESS GRANTED\n");
         printf(RESET);
+        set_current_employee(username);
         employee_page();
     }
     system("cls");
     printf(RED);
     printf("ACCESS DENIED\n");
     printf(RESET);
+
     employee_login_page();
 }
 
@@ -343,6 +346,7 @@ void customer_login_page()
         printf(GREEN);
         printf("ACCESS GRANTED\n");
         printf(RESET);
+        set_current_customer(username);
         exit(0);
     }
     system("cls");
@@ -370,7 +374,7 @@ void employee_page()
     char choice;
     while (page_on)
     {
-        printf("Employee Page\n");
+        printf("Employee Page: %s\n", current_employee.username);
         printf("1 - User Registration and Login\n");
         printf("2 - Account Management\n");
         printf("3 - Transaction History\n");
