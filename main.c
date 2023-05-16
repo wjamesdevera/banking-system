@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <strings.h>
 
 #define MAX_STR_LENGTH 128
 #define MAX_CUSTOMERS 100
@@ -34,9 +35,11 @@ void create_customer_acc();
 void set_current_customer(char username[]);
 bool find_customer(char username[]);
 void set_current_employee(char username[]);
+void save_customers();
+void account_management();
 
 typedef struct {
-    char account_type[MAX_STR_LENGTH];
+    char account_id[MAX_STR_LENGTH];
     char username[MAX_STR_LENGTH];
     char password[MAX_STR_LENGTH];
     char first_name[MAX_STR_LENGTH];
@@ -44,6 +47,7 @@ typedef struct {
     char full_name[MAX_STR_LENGTH];
     int age;
     char gender[MAX_STR_LENGTH];
+    char address[MAX_STR_LENGTH];
     char occupation[MAX_STR_LENGTH];
     char nationality[MAX_STR_LENGTH];
     float height;
@@ -96,8 +100,9 @@ int main()
                 printf(RESET);
         }
     }
-
-    printf("BYE...\n");
+    printf("%s\n", customers[1].username);
+    printf("%d\n", customer_count);
+    save_customers();
     return 0;
 }
 
@@ -299,13 +304,45 @@ void retrieve_customer_acc()
         int len = strlen(buffer);
         buffer[strcspn(buffer, "\n")] = '\0';
 
-        if (line % 2 == 0)
+        if (line % 10 == 0)
         {
             strcpy(customers[customer_count].username, buffer);
         }
-        if (line % 2 == 1)
+        if (line % 10 == 1)
         {
             strcpy(customers[customer_count].password, buffer);
+        }
+        if (line % 10 == 2)
+        {
+            strcpy(customers[customer_count].full_name, buffer);
+        }
+        if (line % 10 == 3)
+        {
+            customers[customer_count].age = atoi(buffer);
+        }
+        if (line % 10 == 4)
+        {
+            strcpy(customers[customer_count].gender, buffer);
+        }
+        if (line % 10 == 5)
+        {
+            strcpy(customers[customer_count].address, buffer);
+        }
+        if (line % 10 == 6)
+        {
+            strcpy(customers[customer_count].occupation, buffer);
+        }
+        if (line % 10 == 7)
+        {
+            customers[customer_count].height = atof(buffer);
+        }
+        if (line % 10 == 8)
+        {
+            customers[customer_count].weight = atof(buffer);
+        }
+        if (line % 10 == 9)
+        {
+            strcpy(customers[customer_count].status, buffer);
             customer_count++;
         }
         line++;
@@ -325,13 +362,20 @@ void add_customer_acc(char username[], char password[])
         return;
     }
 
-    fprintf(file, "\n%s\n%s", username, password);
+    fprintf(file, "%s\n%s\n", username, password);
+    fprintf(file, "%s\n"); // full_name
+    fprintf(file, "\n"); // age
+    fprintf(file, "\n"); // full_name
+    fprintf(file, "\n"); // full_name
+    fprintf(file, "\n"); // full_name
+    fprintf(file, "\n"); // full_name
+    fprintf(file, "\n"); // full_name
+    fprintf(file, "\n"); // full_name
 
     fclose(file);
     retrieve_customer_acc();
     return;
 }
-
 
 void customer_login_page()
 {
@@ -358,7 +402,7 @@ void customer_login_page()
 
 bool authenticate_customer_login(char username[], char password[])
 {
-    for (int i = 0; i < employee_count; i++)
+    for (int i = 0; i < customer_count; i++)
     {
         if (strcmp(username, customers[i].username) == 0 && strcmp(password, customers[i].password) == 0)
         {
@@ -391,6 +435,7 @@ void employee_page()
                 create_customer_acc();
                 break;
             case '2':
+                account_management();
                 break;
             case '3':
                 break;
@@ -472,7 +517,6 @@ void set_current_customer(char username[])
     return;
 }
 
-
 void set_current_employee(char username[])
 {
     for (int i = 0; i < employee_count; i++)
@@ -483,4 +527,50 @@ void set_current_employee(char username[])
         }
     }
     return;
+}
+
+void account_management()
+{
+    char username[MAX_STR_LENGTH];
+    printf("Enter Customer Username: ");
+    scanf("%s", username);
+    if (!find_customer(username))
+    {
+        system("cls");
+        printf(RED);
+        printf("Username not found\n");
+        printf(RESET);
+        return;
+    }
+    set_current_customer(username);
+
+    system("cls");
+    printf("Managing Account: %s%s%s\n", RED, current_customer.username, RESET);
+}
+
+void save_customers()
+{
+    FILE *file;
+
+    file = fopen("./accounts/customer_acc.txt", "w");
+
+    if (file == NULL)
+    {
+        printf("ERROR: Could not create file");
+        return;
+    }
+
+    for (int i = 0; i < customer_count; i++)
+    {
+        fprintf(file, "%s\n", customers[i].username);
+        fprintf(file, "%s\n", customers[i].password);
+        fprintf(file, "%s\n", customers[i].full_name);
+        fprintf(file, "%d\n", customers[i].age);
+        fprintf(file, "%s\n", customers[i].gender);
+        fprintf(file, "%s\n", customers[i].address);
+        fprintf(file, "%s\n", customers[i].occupation);
+        fprintf(file, "%.2f\n", customers[i].height);
+        fprintf(file, "%.2f\n", customers[i].weight);
+        fprintf(file, "%s\n", customers[i].status);
+    }
 }
