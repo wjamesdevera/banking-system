@@ -77,7 +77,9 @@ int main()
                 break;
             default:
                 system("cls");
+                printf(RED);
                 printf("Invalid choice. Please try again.\n");
+                printf(RESET);
         }
     }
 
@@ -121,7 +123,7 @@ void employee_login_page()
                 break;
             default:
                 system("cls");
-                printf(CYAN);
+                printf(RED);
                 printf("Invalid Choice. Please try again\n");
                 printf(RESET);
         }
@@ -252,5 +254,6 @@ void add_employee_account(char username[], char password[])
     fprintf(file, "\n%s\n%s", username, password);
 
     fclose(file);
+    retrieve_employee_acc();
     return;
 }
