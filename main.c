@@ -115,6 +115,7 @@ void employee_login_page()
                 employee_login();
                 break;
             case '2':
+                login_on = false;
                 employee_create_acc();
                 break;
             case '3':
@@ -217,15 +218,19 @@ void employee_create_acc()
     if (find_employee(username))
     {
         system("cls");
+        printf(RED);
         printf("Username already exists\n");
-        return;
+        printf(RESET);
+        employee_login_page();
     }
     printf("Password: ");
     scanf("%s", password);
     add_employee_account(username, password);
     system("cls");
+    printf(GREEN);
     printf("Account Creation Successful\n");
-    return;
+    printf(RESET);
+    employee_login_page();
 }
 
 bool find_employee(char username[])
