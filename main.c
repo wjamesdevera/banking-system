@@ -37,6 +37,7 @@ bool find_customer(char username[]);
 void set_current_employee(char username[]);
 void save_customers();
 void account_management();
+void create_transaction_log();
 
 typedef struct {
     char account_id[MAX_STR_LENGTH];
@@ -482,6 +483,7 @@ void create_customer_acc()
     printf("Password: ");
     scanf("%s", password);
     add_customer_acc(username, password);
+    create_transaction_log(username);
     system("cls");
     printf(GREEN);
     printf("Account Creation Successful\n");
@@ -599,4 +601,27 @@ void save_customers()
         fprintf(file, "%.2f\n", customers[i].weight);
         fprintf(file, "%s\n", customers[i].status);
     }
+}
+
+void create_transaction_log(char username[])
+{
+    char filepath[] = "./customer_accounts/";
+    char file_txt[] = ".txt";
+    char file_name[MAX_STR_LENGTH];
+    strcpy(file_name, username);
+    strcat(file_name, file_txt);
+    strcat(filepath, file_name);
+
+    FILE *file;
+
+    file = fopen(filepath, "w");
+    
+    if (file == NULL)
+    {
+        printf("File Creation Failed\n");
+        return;
+    }
+
+    fprintf(file, "USER=%s\n", username);
+    fclose(file);
 }
